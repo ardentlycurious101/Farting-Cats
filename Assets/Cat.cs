@@ -2,6 +2,9 @@
 
 public class Cat : MonoBehaviour
 {
+    [SerializeField] float mainThrust = 200f;
+    [SerializeField] float rotationThrust = 200f;
+
     Rigidbody rigidBody;
     AudioSource audioSource;
 
@@ -15,28 +18,35 @@ public class Cat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ProcessInput();
-    }
-
-    private void ProcessInput()
-    {
         Thrust();
+        Rotate();
+    }
 
-        if (Input.GetKey(KeyCode.A))
+    void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
         {
-            transform.Rotate(Vector3.forward);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(-Vector3.forward);
+            case "Deadly":
+                print("Deadly");
+                break;
+            case "OK":
+                print("OK");
+                break;
+            case "Fuel":
+                print("Fuel");
+                break;
         }
     }
+
 
     private void Thrust()
     {
+
+        float thrustSpeed = Time.deltaTime * mainThrust;
+
         if (Input.GetKey(KeyCode.Space)) // can thrust while rotating
         {
-            rigidBody.AddRelativeForce(Vector3.up);
+            rigidBody.AddRelativeForce(Vector3.up * thrustSpeed);
             if (!audioSource.isPlaying) // so it doesn't layer
             {
                 audioSource.Play();
@@ -46,5 +56,25 @@ public class Cat : MonoBehaviour
         //{
         //    audioSource.Stop();
         //}
+
     }
+
+    private void Rotate()
+    {
+        rigidBody.freezeRotation = true; // take manual control of rotation
+        float rotationSpeed = Time.deltaTime * rotationThrust;
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            transform.Rotate(Vector3.forward * rotationSpeed);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            transform.Rotate(-Vector3.forward * rotationSpeed);
+        }
+
+        rigidBody.freezeRotation = false; // resume physics control of rotation
+
+    }
+
 }
