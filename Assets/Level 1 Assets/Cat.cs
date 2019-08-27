@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Cat : MonoBehaviour
 {
@@ -28,12 +29,16 @@ public class Cat : MonoBehaviour
         {
             case "Deadly":
                 print("Deadly");
+                SceneManager.LoadScene(0);
                 break;
             case "OK":
                 print("OK");
                 break;
-            case "Fuel":
-                print("Fuel");
+            case "Finish":
+                print("Finish");
+                SceneManager.LoadScene(1);
+                break;
+            default:
                 break;
         }
     }
@@ -78,3 +83,4 @@ public class Cat : MonoBehaviour
     }
 
 }
+;
