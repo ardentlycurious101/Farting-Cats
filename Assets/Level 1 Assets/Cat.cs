@@ -6,9 +6,14 @@ public class Cat : MonoBehaviour
 {
     [SerializeField] float mainThrust = 200f;
     [SerializeField] float rotationThrust = 200f;
-    [SerializeField] AudioClip mainEngine;
+
+    [SerializeField] AudioClip meow;
     [SerializeField] AudioClip success;
     [SerializeField] AudioClip death;
+
+    [SerializeField] ParticleSystem fireFartParticles;
+    [SerializeField] ParticleSystem successParticles;
+    [SerializeField] ParticleSystem deathParticles;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
@@ -61,14 +66,16 @@ public class Cat : MonoBehaviour
     {
         state = State.Dying;
         audioSource.PlayOneShot(death);
-        Invoke("LoadFirstLevel", 1.0f);
+        deathParticles.Play();
+        Invoke("LoadFirstLevel", 2.0f);
     }
 
     private void StartSuccessSequence()
     {
         state = State.Transcending;
         audioSource.PlayOneShot(success);
-        Invoke("LoadNextLevel", 1.0f);
+        successParticles.Play();
+        Invoke("LoadNextLevel", 2.0f);
     }
 
     private void LoadFirstLevel()
@@ -89,12 +96,15 @@ public class Cat : MonoBehaviour
         if (Input.GetKey(KeyCode.Space)) // can thrust while rotating
         {
             ApplyThrust(thrustSpeed);
-        }
+        } 
         //else // commented out because mp3 file is very short, might sound unnatural.
         //{
         //    audioSource.Stop();
         //}
-
+        else
+        {
+            fireFartParticles.Stop();
+        }
     }
 
     private void ApplyThrust(float thrustSpeed)
@@ -102,8 +112,9 @@ public class Cat : MonoBehaviour
         rigidBody.AddRelativeForce(Vector3.up * thrustSpeed);
         if (!audioSource.isPlaying) // so it doesn't layer
         {
-            audioSource.PlayOneShot(mainEngine);
+            audioSource.PlayOneShot(meow);
         }
+        fireFartParticles.Play();
     }
 
     private void RespondToRotateInput()
