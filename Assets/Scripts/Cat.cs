@@ -6,6 +6,7 @@ public class Cat : MonoBehaviour
 {
     [SerializeField] float mainThrust = 200f;
     [SerializeField] float rotationThrust = 200f;
+    [SerializeField] float levelLoadDelay = 2f;
 
     [SerializeField] AudioClip meow;
     [SerializeField] AudioClip success;
@@ -67,7 +68,7 @@ public class Cat : MonoBehaviour
         state = State.Dying;
         audioSource.PlayOneShot(death);
         deathParticles.Play();
-        Invoke("LoadFirstLevel", 2.0f);
+        Invoke("LoadFirstLevel", levelLoadDelay);
     }
 
     private void StartSuccessSequence()
@@ -75,7 +76,7 @@ public class Cat : MonoBehaviour
         state = State.Transcending;
         audioSource.PlayOneShot(success);
         successParticles.Play();
-        Invoke("LoadNextLevel", 2.0f);
+        Invoke("LoadNextLevel", levelLoadDelay);
     }
 
     private void LoadFirstLevel()
@@ -109,7 +110,7 @@ public class Cat : MonoBehaviour
 
     private void ApplyThrust(float thrustSpeed)
     {
-        rigidBody.AddRelativeForce(Vector3.up * thrustSpeed);
+        rigidBody.AddRelativeForce(Vector3.up * thrustSpeed * Time.deltaTime);
         if (!audioSource.isPlaying) // so it doesn't layer
         {
             audioSource.PlayOneShot(meow);
