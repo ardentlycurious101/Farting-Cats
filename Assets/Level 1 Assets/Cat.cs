@@ -1,13 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Cat : MonoBehaviour
 {
     [SerializeField] float mainThrust = 200f;
     [SerializeField] float rotationThrust = 200f;
+    [SerializeField] AudioClip mainEngine;
+    [SerializeField] AudioClip success;
+    [SerializeField] AudioClip death;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
+
+    enum State { Alive, Dying, Transcending };
+    State state = State.Alive;
 
     // Start is called before the first frame update
     void Start()
@@ -19,43 +26,69 @@ public class Cat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Thrust();
-        Rotate();
+        // TODO: somwhere stop sound for death
+        if (state == State.Alive)
+        {
+            RespondToThrustInput();
+            RespondToRotateInput();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (state != State.Alive)
+        {
+            return;
+        }
+
         switch (collision.gameObject.tag)
         {
             case "Deadly":
-                print("Deadly");
-                SceneManager.LoadScene(0);
+                StartDeathSequence();
                 break;
             case "OK":
                 print("OK");
                 break;
             case "Finish":
-                print("Finish");
-                SceneManager.LoadScene(1);
+                StartSuccessSequence();
                 break;
             default:
                 break;
         }
     }
 
+    private void StartDeathSequence()
+    {
+        state = State.Dying;
+        audioSource.PlayOneShot(death);
+        Invoke("LoadFirstLevel", 1.0f);
+    }
 
-    private void Thrust()
+    private void StartSuccessSequence()
+    {
+        state = State.Transcending;
+        audioSource.PlayOneShot(success);
+        Invoke("LoadNextLevel", 1.0f);
+    }
+
+    private void LoadFirstLevel()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    private void LoadNextLevel()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    private void RespondToThrustInput()
     {
 
         float thrustSpeed = Time.deltaTime * mainThrust;
 
         if (Input.GetKey(KeyCode.Space)) // can thrust while rotating
         {
-            rigidBody.AddRelativeForce(Vector3.up * thrustSpeed);
-            if (!audioSource.isPlaying) // so it doesn't layer
-            {
-                audioSource.Play();
-            }
+            ApplyThrust(thrustSpeed);
         }
         //else // commented out because mp3 file is very short, might sound unnatural.
         //{
@@ -64,7 +97,16 @@ public class Cat : MonoBehaviour
 
     }
 
-    private void Rotate()
+    private void ApplyThrust(float thrustSpeed)
+    {
+        rigidBody.AddRelativeForce(Vector3.up * thrustSpeed);
+        if (!audioSource.isPlaying) // so it doesn't layer
+        {
+            audioSource.PlayOneShot(mainEngine);
+        }
+    }
+
+    private void RespondToRotateInput()
     {
         rigidBody.freezeRotation = true; // take manual control of rotation
         float rotationSpeed = Time.deltaTime * rotationThrust;

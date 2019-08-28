@@ -198,6 +198,26 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 0.04
       objectReference: {fileID: 0}
+    - target: {fileID: 1164155510, guid: d822290e0eba64afcb98f1126ffb01db, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1164155510, guid: d822290e0eba64afcb98f1126ffb01db, type: 3}
+      propertyPath: BypassReverbZones
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1164155509, guid: d822290e0eba64afcb98f1126ffb01db, type: 3}
+      propertyPath: mainEngine
+      value: 
+      objectReference: {fileID: 8300000, guid: 9911ddd74d7434694a3f590ada27c562, type: 3}
+    - target: {fileID: 1164155509, guid: d822290e0eba64afcb98f1126ffb01db, type: 3}
+      propertyPath: success
+      value: 
+      objectReference: {fileID: 8300000, guid: 87494ea302a7447138010ec3387c852e, type: 3}
+    - target: {fileID: 1164155509, guid: d822290e0eba64afcb98f1126ffb01db, type: 3}
+      propertyPath: death
+      value: 
+      objectReference: {fileID: 8300000, guid: 64d9d6b987b3a44059220f3374faa56a, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d822290e0eba64afcb98f1126ffb01db, type: 3}
 --- !u!1001 &5328282011408202578
