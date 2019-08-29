@@ -110,7 +110,7 @@ public class Cat : MonoBehaviour
 
     private void ApplyThrust(float thrustSpeed)
     {
-        rigidBody.AddRelativeForce(Vector3.up * thrustSpeed * Time.deltaTime);
+        rigidBody.AddRelativeForce(Vector3.up * thrustSpeed);
         if (!audioSource.isPlaying) // so it doesn't layer
         {
             audioSource.PlayOneShot(meow);

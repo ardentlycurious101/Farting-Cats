@@ -219,6 +219,10 @@ PrefabInstance:
       propertyPath: meow
       value: 
       objectReference: {fileID: 8300000, guid: 9911ddd74d7434694a3f590ada27c562, type: 3}
+    - target: {fileID: 1164155509, guid: d822290e0eba64afcb98f1126ffb01db, type: 3}
+      propertyPath: mainThrust
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 4940884431619857, guid: d822290e0eba64afcb98f1126ffb01db, type: 3}
       propertyPath: m_LocalScale.z
       value: 2
